@@ -1,6 +1,9 @@
-name: ss_experience
+name: docs_experience
 dependencies:
   browser: "^0.10.0+2"
-  over_react: "^1.18.1"
+  over_react: "1.17.0"
 transformers:
 - over_react
+- $dart2js:
+    minify: true
+    sourceMaps: true

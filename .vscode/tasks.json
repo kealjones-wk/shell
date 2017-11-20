@@ -6,7 +6,7 @@
     {
       "taskName": "Dart: Pub Serve",
       "type": "shell",
-      "command": "pub serve",
+      "command": "pub serve --port 8082",
       "problemMatcher": []
     }
   ]

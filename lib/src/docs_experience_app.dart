@@ -1,26 +1,26 @@
 import 'package:over_react/over_react.dart';
 
 @Factory()
-UiFactory<SSExperienceAppProps> SSExperienceApp;
+UiFactory<DocsExperienceAppProps> DocsExperienceApp;
 
 @Props()
-class SSExperienceAppProps extends UiProps {
+class DocsExperienceAppProps extends UiProps {
 }
 
 @State()
-class SSExperienceAppState extends UiState {
+class DocsExperienceAppState extends UiState {
   int counter;
 }
 
 @Component()
-class SSExperienceAppComponent extends UiStatefulComponent<SSExperienceAppProps, SSExperienceAppState>  {
+class DocsExperienceAppComponent extends UiStatefulComponent<DocsExperienceAppProps, DocsExperienceAppState>  {
   Map getInitialState() => (newState()
     ..counter = 0
   );
   
   render() {
     return Dom.div()(
-      Dom.h3()('Using over_react 1.18.1'),
+      Dom.h3()('Using over_react 1.17.0'),
       Dom.span()('Counter: ' + state.counter.toString()),
       Dom.div()(
         (Dom.button()
