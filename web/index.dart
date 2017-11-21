@@ -1,7 +1,12 @@
 import 'dart:html';
 
-import 'package:docs_experience/docs_experience.dart';
+import 'package:react/react_dom.dart' as react;
+import 'package:react/react_client.dart';
+
+import 'package:shell/shell.dart';
 
 void main() {
-  document.registerElement('docs-experience', DocsExperience);
+  setClientConfiguration();
+  
+  react.render(ShellApp()(), document.querySelector('#shellApp'));
 }

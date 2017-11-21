@@ -4,9 +4,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "taskName": "Dart: Pub Serve",
+      "label": "Dart: Pub Serve",
       "type": "shell",
-      "command": "pub serve --port 8082",
+      "command": "pub serve --port 8080",
       "problemMatcher": []
     }
   ]

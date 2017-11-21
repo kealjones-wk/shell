@@ -1,7 +1,7 @@
-name: docs_experience
+name: shell
 dependencies:
   browser: "^0.10.0+2"
-  over_react: "1.17.0"
+  over_react: "1.18.0"
 transformers:
 - over_react
 - $dart2js:
