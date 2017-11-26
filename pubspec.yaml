@@ -2,6 +2,8 @@ name: shell
 dependencies:
   browser: "^0.10.0+2"
   over_react: "1.18.0"
+  shell_events:
+    path: /Users/joelleibow/Projects/shell_events
 transformers:
 - over_react
 - $dart2js:
