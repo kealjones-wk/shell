@@ -1,3 +1,3 @@
-library ss_experience;
+library shell;
 
 export './src/shell_app.dart';

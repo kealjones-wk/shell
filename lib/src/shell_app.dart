@@ -20,15 +20,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   
   render() {
     return Dom.div()(
-      Dom.span()('Counter: ' + state.counter.toString()),
-      Dom.div()(
-        (Dom.button()
-          ..onClick = (event) => setState(newState()..counter = ++state.counter)
-        )('Increment'),
-        (Dom.button()
-          ..onClick = (event) => setState(newState()..counter = --state.counter)
-        )('Decrement')
-      )
+      Dom.h2()('Using over_react 1.18.0')
     );
   }
 }
