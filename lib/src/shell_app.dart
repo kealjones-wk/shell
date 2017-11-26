@@ -5,22 +5,47 @@ UiFactory<ShellAppProps> ShellApp;
 
 @Props()
 class ShellAppProps extends UiProps {
+  bool showMessages;
 }
 
 @State()
 class ShellAppState extends UiState {
-  int counter;
+  bool showMessages;
 }
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
+  @override
+  Map getDefaultProps() => (newProps()
+    ..showMessages = true
+  );
+  
+  @override
   Map getInitialState() => (newState()
-    ..counter = 0
+    ..showMessages = props.showMessages
   );
   
   render() {
-    return Dom.div()(
-      Dom.h2()('Using over_react 1.18.0')
+    return (Dom.div()..className = 'shell')(
+      Dom.h2()('Using over_react 1.18.0'),
+      _renderShellControls(),
+      _renderMessages()
+    );
+  }
+
+  _renderShellControls() {
+    return (Dom.div()..className = 'shell__controls')(
+      Dom.button()('Toggle Messages')
+    );
+  }
+
+  _renderMessages() {
+    var classes = new ClassNameBuilder()
+      ..add('shell__messages')
+      ..add('shell__messages--hidden', !state.showMessages);
+    
+    return (Dom.div()..className = classes.toClassName())(
+      Dom.h4()('Messages')
     );
   }
 }
