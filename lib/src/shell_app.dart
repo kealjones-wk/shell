@@ -58,7 +58,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
 
   ReactElement _renderShellControls() {
     return (Dom.div()..className = 'shell__controls')(
-      (Dom.button()..onClick = (event) => document.dispatchEvent(new ToggleMessages()))('Toggle Messages')
+      (Dom.button()..onClick = (event) => document.dispatchEvent(new ShellToggleMessagesEvent()))('Toggle Messages')
     );
   }
 
