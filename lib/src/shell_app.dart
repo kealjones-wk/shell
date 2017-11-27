@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:over_react/over_react.dart';
+import 'package:shell_events/shell_events.dart';
 
 @Factory()
 UiFactory<ShellAppProps> ShellApp;
@@ -30,7 +33,21 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     ..showMessages = props.showMessages
     ..messages = props.messages
   );
+
+  @override
+  void componentWillMount() {
+    super.componentWillMount();
+
+    document.addEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
+  }
   
+  @override
+  void componentWillUnmount() {
+    super.componentWillUnmount();
+
+    document.removeEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
+  }
+
   render() {
     return (Dom.div()..className = 'shell')(
       Dom.h2()('Using over_react 1.18.0'),
@@ -39,13 +56,13 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     );
   }
 
-  _renderShellControls() {
+  ReactElement _renderShellControls() {
     return (Dom.div()..className = 'shell__controls')(
-      Dom.button()('Toggle Messages')
+      (Dom.button()..onClick = (event) => document.dispatchEvent(new ToggleMessages()))('Toggle Messages')
     );
   }
 
-  _renderMessagesBox() {
+  ReactElement _renderMessagesBox() {
     var classes = new ClassNameBuilder()
       ..add('shell__messages')
       ..add('shell__messages--hidden', !state.showMessages);
@@ -56,7 +73,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     );
   }
 
-  _renderMessages() {
+  List<ReactElement> _renderMessages() {
     List messages = [];
 
     for (var i = 0; i < state.messages.length; i++) {
@@ -64,5 +81,9 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     }
 
     return messages;
+  }
+
+  void _handleToggleMessages(Event event) {
+    setState(newState()..showMessages = !state.showMessages);
   }
 }
