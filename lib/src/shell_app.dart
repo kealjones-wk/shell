@@ -22,6 +22,8 @@ class ShellAppState extends UiState {
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
+  ReactElement _toggleMessagesButton;
+  
   @override
   Map getDefaultProps() => (newProps()
     ..showMessages = true
@@ -58,7 +60,16 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
 
   ReactElement _renderShellControls() {
     return (Dom.div()..className = 'shell__controls')(
-      (Dom.button()..onClick = (event) => document.dispatchEvent(new ShellToggleMessagesEvent()))('Toggle Messages')
+      (Dom.button()..onClick = (event) => document.body.append(new Element.tag('docs-experience')))('New Docs Experience'),
+      (Dom.button()..onClick = (event) => document.body.append(new Element.tag('ss-experience')))('New Spreadsheets Experience'),
+      (Dom.button()
+        ..onClick = (event) {
+            findDomNode(_toggleMessagesButton).dispatchEvent(new ShellToggleMessagesEvent());
+          }
+        ..ref = (ref) {
+          _toggleMessagesButton = ref;
+        }
+      )('Toggle Messages')
     );
   }
 
@@ -84,6 +95,8 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   }
 
   void _handleToggleMessages(Event event) {
+    print(event.target);
+
     setState(newState()..showMessages = !state.showMessages);
   }
 }
