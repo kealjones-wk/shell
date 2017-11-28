@@ -177,7 +177,7 @@ packages:
     version: "3.6.0"
   shell_events:
     description:
-      path: "/Users/joelleibow/Projects/shell_events"
+      path: "/Users/joelleibow/.publink/shell_events"
       relative: false
     source: path
     version: "1.0.0"
