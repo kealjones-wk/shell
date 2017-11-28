@@ -9,6 +9,20 @@
         margin: 0;
       }
 
+      docs-experience, ss-experience {
+        display: inline-block;
+        margin: .5rem;
+        padding: .5rem;
+      }
+
+      docs-experience {
+        border: 1px solid #66cc00;
+      }
+      
+      ss-experience {
+        border: 1px solid #0094ff;
+      }
+
       .shell__controls {
         padding: .5rem;
       }
@@ -22,7 +36,7 @@
       }
 
       .shell__messages--hidden {
-        display: none;
+        visibility: hidden;
       }
     </style>
 
@@ -36,6 +50,10 @@
     <script src="packages/react/react.js"></script>
     <script src="packages/react/react_dom.js"></script>
     <script src="packages/browser/dart.js"></script>
+
+    <!-- Experience Custom Elements -->
+    <script src="http://localhost:8082/index.dart.js"></script> <!-- docs-experience -->
+    <script src="http://localhost:8081/index.dart.js"></script> <!-- ss-experience -->
 
   </body>
 
