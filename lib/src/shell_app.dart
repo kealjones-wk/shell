@@ -17,12 +17,13 @@ class ShellAppProps extends UiProps {
 class ShellAppState extends UiState {
   bool showMessages;
   
-  List messages;
+  List<String> messages;
 }
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
   ReactElement _toggleMessagesButton;
+  ReactElement _messagesBox;
   
   @override
   Map getDefaultProps() => (newProps()
@@ -41,6 +42,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     super.componentWillMount();
 
     document.addEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
+    document.addEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
   }
   
   @override
@@ -48,6 +50,15 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     super.componentWillUnmount();
 
     document.removeEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
+    document.removeEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
+  }
+
+  @override
+  void componentDidUpdate(prevProps, prevState) {
+    if(state.showMessages) {
+      var _messagesBoxNode = findDomNode(_messagesBox);
+      _messagesBoxNode.scrollTo(0, _messagesBoxNode.scrollHeight);
+    }
   }
 
   render() {
@@ -78,7 +89,12 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
       ..add('shell__messages')
       ..add('shell__messages--hidden', !state.showMessages);
     
-    return (Dom.div()..className = classes.toClassName())(
+    return (Dom.div()
+      ..className = classes.toClassName()
+      ..ref = (ref) {
+        _messagesBox = ref;
+      }
+    )(
       Dom.h4()('Messages'),
       _renderMessages()
     );
@@ -94,9 +110,18 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     return messages;
   }
 
-  void _handleToggleMessages(Event event) {
-    print(event.target);
-
+  void _handleToggleMessages(event) {
+    var toggledBy = (event.target == findDomNode(_toggleMessagesButton) ? 'shell' : event.target);
+    findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
+        {'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'}));
+    
     setState(newState()..showMessages = !state.showMessages);
+  }
+
+  void _handlePostMessage(event) {
+    var messages = new List.from(state.messages);
+    messages.add('${new DateTime.now().toString()} - ${event.detail['message']}');
+    
+    setState(newState()..messages = messages);
   }
 }
