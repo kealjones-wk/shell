@@ -22,8 +22,8 @@ class ShellAppState extends UiState {
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
-  ReactElement _toggleMessagesButton;
-  ReactElement _messagesBox;
+  ButtonElement _toggleMessagesButton;
+  DivElement _messagesBox;
   
   @override
   Map getDefaultProps() => (newProps()
