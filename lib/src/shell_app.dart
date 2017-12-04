@@ -113,14 +113,15 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   void _handleToggleMessages(event) {
     var toggledBy = (event.target == findDomNode(_toggleMessagesButton) ? 'shell' : event.target);
     findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
-        {'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'}));
+        'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'));
     
     setState(newState()..showMessages = !state.showMessages);
   }
 
   void _handlePostMessage(event) {
     var messages = new List.from(state.messages);
-    messages.add('${new DateTime.now().toString()} - ${event.detail['message']}');
+    var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.target}:';
+    messages.add('${new DateTime.now().toString()} - ${postBy} ${event.detail}');
     
     setState(newState()..messages = messages);
   }
