@@ -1,9 +1,6 @@
-@JS()
-library shell_app;
-
 import 'dart:html';
 
-import 'package:js/js.dart';
+import 'package:js/js_util.dart';
 import 'package:over_react/over_react.dart';
 import 'package:shell_events/shell_events.dart';
 
@@ -117,7 +114,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   void _handleToggleMessages(event) {
     var toggledBy = (event.target == findDomNode(_toggleMessagesButton) ? 'shell' : event.target);
     findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
-      {'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'}
+      jsify({'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'})
     ));
     
     setState(newState()..showMessages = !state.showMessages);
