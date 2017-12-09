@@ -4,6 +4,8 @@ import 'package:js/js_util.dart';
 import 'package:over_react/over_react.dart';
 import 'package:shell_events/shell_events.dart';
 
+import './shell_experience_constants.dart';
+
 @Factory()
 UiFactory<ShellAppProps> ShellApp;
 
@@ -23,7 +25,6 @@ class ShellAppState extends UiState {
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
-  ButtonElement _toggleMessagesButton;
   DivElement _messagesBox;
   
   @override
@@ -42,16 +43,18 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   void componentWillMount() {
     super.componentWillMount();
 
-    document.addEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
+    document.addEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleExperienceRequested);
     document.addEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
+    document.addEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
   }
   
   @override
   void componentWillUnmount() {
     super.componentWillUnmount();
 
-    document.removeEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
+    document.removeEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleExperienceRequested);
     document.removeEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
+    document.removeEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
   }
 
   @override
@@ -72,14 +75,23 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
 
   ReactElement _renderShellControls() {
     return (Dom.div()..className = 'shell__controls')(
-      (Dom.button()..onClick = (event) => document.body.append(new Element.tag('docs-experience')))('New Docs Experience'),
-      (Dom.button()..onClick = (event) => document.body.append(new Element.tag('ss-experience')))('New Spreadsheets Experience'),
       (Dom.button()
         ..onClick = (event) {
-            findDomNode(_toggleMessagesButton).dispatchEvent(new ShellToggleMessagesEvent());
-          }
-        ..ref = (ref) {
-          _toggleMessagesButton = ref;
+          var eventDetail = jsify({'experience': ShellExperienceConstants.DOCS.experience});
+          event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: eventDetail));
+
+          document.body.append(new Element.tag('docs-experience'));
+        }
+      )('New Docs Experience'),
+      (Dom.button()..onClick = (event) {
+        var eventDetail = jsify({'experience': ShellExperienceConstants.SPREADSHEETS.experience});
+        event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: eventDetail));
+        
+        document.body.append(new Element.tag('ss-experience'));
+      })('New Spreadsheets Experience'),
+      (Dom.button()
+        ..onClick = (event) {
+          event.target.dispatchEvent(new ShellToggleMessagesEvent());
         }
       )('Toggle Messages')
     );
@@ -111,13 +123,8 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     return messages;
   }
 
-  void _handleToggleMessages(event) {
-    var toggledBy = (event.target == findDomNode(_toggleMessagesButton) ? 'shell' : event.target);
-    findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
-      jsify({'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'})
-    ));
-    
-    setState(newState()..showMessages = !state.showMessages);
+  void _handleExperienceRequested(event) {
+    print(event.detail['experience']);
   }
 
   void _handlePostMessage(event) {
@@ -126,5 +133,14 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     
     messages.add('${new DateTime.now().toString()} - ${postBy} ${event.detail['message']}');
     setState(newState()..messages = messages);
+  }
+
+  void _handleToggleMessages(event) {
+    var toggledBy = (event.target is ButtonElement) ? 'shell' : event.target;
+    findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
+      jsify({'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'})
+    ));
+    
+    setState(newState()..showMessages = !state.showMessages);
   }
 }
