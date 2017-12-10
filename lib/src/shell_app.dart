@@ -4,7 +4,8 @@ import 'package:js/js_util.dart';
 import 'package:over_react/over_react.dart';
 import 'package:shell_events/shell_events.dart';
 
-import './shell_experience_constants.dart';
+import './shell_experience.dart';
+import './shell_experience_registry.dart';
 
 @Factory()
 UiFactory<ShellAppProps> ShellApp;
@@ -25,6 +26,7 @@ class ShellAppState extends UiState {
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
+  ShellExperienceRegistry _shellExperienceRegistry;
   DivElement _messagesBox;
   
   @override
@@ -42,6 +44,8 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   @override
   void componentWillMount() {
     super.componentWillMount();
+
+    _shellExperienceRegistry = new ShellExperienceRegistry();
 
     document.addEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleExperienceRequested);
     document.addEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
@@ -77,17 +81,13 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     return (Dom.div()..className = 'shell__controls')(
       (Dom.button()
         ..onClick = (event) {
-          var eventDetail = jsify({'experience': ShellExperienceConstants.DOCS.experience});
+          var eventDetail = jsify({'experience': ShellExperience.DOCS});
           event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: eventDetail));
-
-          document.body.append(new Element.tag('docs-experience'));
         }
       )('New Docs Experience'),
       (Dom.button()..onClick = (event) {
-        var eventDetail = jsify({'experience': ShellExperienceConstants.SPREADSHEETS.experience});
+        var eventDetail = jsify({'experience': ShellExperience.SPREADSHEETS});
         event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: eventDetail));
-        
-        document.body.append(new Element.tag('ss-experience'));
       })('New Spreadsheets Experience'),
       (Dom.button()
         ..onClick = (event) {
@@ -124,7 +124,9 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   }
 
   void _handleExperienceRequested(event) {
-    print(event.detail['experience']);
+    var requestedExperienceMeta = _shellExperienceRegistry.getShellExperienceMeta(event.detail['experience']);
+    
+    document.body.append(new Element.tag('${requestedExperienceMeta.prefix}-experience'));
   }
 
   void _handlePostMessage(event) {
