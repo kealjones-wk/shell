@@ -32,7 +32,7 @@ class ShellExperienceManager {
     if(!experienceMeta.isLoaded) {
       var asyncExperienceLoader = new AsyncScriptLoader(experienceMeta.source);
       var asyncExperienceLoaderOnLoad = asyncExperienceLoader.loadScript();
-      await asyncExperienceLoaderOnLoad.whenComplete(() => experienceMeta.isLoaded = true);
+      asyncExperienceLoaderOnLoad.whenComplete(await () => experienceMeta.isLoaded = true);
     }
     
     document.body.append(new Element.tag(experienceMeta.tag));

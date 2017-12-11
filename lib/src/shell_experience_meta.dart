@@ -8,18 +8,18 @@ class ShellExperienceMeta {
 
   ShellExperienceMeta(this.shellExperience) {
     prefix = shellExperience.prefix;
-    source = 'http://${CDN_URL}/${prefix}-experience/${RELEASE_DIR}/${SCRIPT_NAME}';
+    source = 'http://${CDN_URL}/${tag}/${RELEASE_DIR}/${SCRIPT_NAME}';
   }
 
-  ShellExperience shellExperience;
-  
+  bool isLoaded = false;
+
   String prefix;
+
+  ShellExperience shellExperience;
+
+  String source;
 
   String get tag {
     return '${prefix}${TAG_POSTFIX}';
   }
-
-  String source;
-
-  bool isLoaded = false;
 }

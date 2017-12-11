@@ -77,23 +77,31 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     );
   }
 
-  ReactElement _renderShellControls() {
-    return (Dom.div()..className = 'shell__controls')(
-      (Dom.button()
-        ..onClick = (event) {
-          event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: {'experience': ShellExperience.DOCS}));
-        }
-      )('New Docs Experience'),
-      (Dom.button()..onClick = (event) {
-        event.target.dispatchEvent(new ShellExperienceRequstedEvent(
-          detail: {'experience': ShellExperience.SPREADSHEETS}));
-      })('New Spreadsheets Experience'),
-      (Dom.button()
-        ..onClick = (event) {
-          event.target.dispatchEvent(new ShellToggleMessagesEvent());
-        }
-      )('Toggle Messages')
-    );
+  void _handlePostMessage(event) {
+    var messages = new List.from(state.messages);
+    var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.target}:';
+    
+    messages.add('${new DateTime.now().toString()} - ${postBy} ${event.detail['message']}');
+    setState(newState()..messages = messages);
+  }
+
+  void _handleToggleMessages(event) {
+    var toggledBy = (event.target is ButtonElement) ? 'shell' : event.target;
+    findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
+      {'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'}
+    ));
+    
+    setState(newState()..showMessages = !state.showMessages);
+  }
+
+  List<ReactElement> _renderMessages() {
+    List messages = [];
+
+    for (var i = 0; i < state.messages.length; i++) {
+      messages.add(Dom.em()(Dom.p()(state.messages[i])));
+    }
+
+    return messages;
   }
 
   ReactElement _renderMessagesBox() {
@@ -112,30 +120,22 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     );
   }
 
-  List<ReactElement> _renderMessages() {
-    List messages = [];
-
-    for (var i = 0; i < state.messages.length; i++) {
-      messages.add(Dom.em()(Dom.p()(state.messages[i])));
-    }
-
-    return messages;
-  }
-
-  void _handlePostMessage(event) {
-    var messages = new List.from(state.messages);
-    var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.target}:';
-    
-    messages.add('${new DateTime.now().toString()} - ${postBy} ${event.detail['message']}');
-    setState(newState()..messages = messages);
-  }
-
-  void _handleToggleMessages(event) {
-    var toggledBy = (event.target is ButtonElement) ? 'shell' : event.target;
-    findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
-      {'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'}
-    ));
-    
-    setState(newState()..showMessages = !state.showMessages);
+  ReactElement _renderShellControls() {
+    return (Dom.div()..className = 'shell__controls')(
+      (Dom.button()
+        ..onClick = (event) {
+          event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: {'experience': ShellExperience.DOCS}));
+        }
+      )('New Docs Experience'),
+      (Dom.button()..onClick = (event) {
+        event.target.dispatchEvent(new ShellExperienceRequstedEvent(
+          detail: {'experience': ShellExperience.SPREADSHEETS}));
+      })('New Spreadsheets Experience'),
+      (Dom.button()
+        ..onClick = (event) {
+          event.target.dispatchEvent(new ShellToggleMessagesEvent());
+        }
+      )('Toggle Messages')
+    );
   }
 }
