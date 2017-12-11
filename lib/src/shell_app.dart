@@ -5,7 +5,7 @@ import 'package:over_react/over_react.dart';
 import 'package:shell_events/shell_events.dart';
 
 import './shell_experience.dart';
-import './shell_experience_registry.dart';
+import './shell_experience_manager.dart';
 
 @Factory()
 UiFactory<ShellAppProps> ShellApp;
@@ -26,7 +26,7 @@ class ShellAppState extends UiState {
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
-  ShellExperienceRegistry _shellExperienceRegistry;
+  ShellExperienceManager _shellExperienceManager;
   DivElement _messagesBox;
   
   @override
@@ -45,7 +45,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   void componentWillMount() {
     super.componentWillMount();
 
-    _shellExperienceRegistry = new ShellExperienceRegistry();
+    _shellExperienceManager = new ShellExperienceManager();
 
     document.addEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleExperienceRequested);
     document.addEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
@@ -124,9 +124,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   }
 
   void _handleExperienceRequested(event) {
-    var requestedExperienceMeta = _shellExperienceRegistry.getShellExperienceMeta(event.detail['experience']);
-    
-    document.body.append(new Element.tag('${requestedExperienceMeta.prefix}-experience'));
+    _shellExperienceManager.addExperience(event.detail['experience']);
   }
 
   void _handlePostMessage(event) {
