@@ -122,10 +122,6 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     return messages;
   }
 
-  void _handleExperienceRequested(event) {
-    _shellExperienceManager.addExperience(event.detail['experience']);
-  }
-
   void _handlePostMessage(event) {
     var messages = new List.from(state.messages);
     var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.target}:';
