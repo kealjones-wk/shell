@@ -1,5 +1,7 @@
 import 'dart:html';
 
+import 'package:shell_events/shell_events.dart' show ShellEventConstants;
+
 import './shell_experience.dart';
 import './shell_experience_meta.dart';
 
@@ -18,11 +20,23 @@ class ShellExperienceManager {
     });
   }
 
+  void _handleAddExperience(event) {
+    addExperience(event.detail['experience']);
+  }
+
   void addExperience(ShellExperience experience) {
     document.body.append(new Element.tag(getShellExperienceMeta(experience).tag));
   }
 
+  void disposeEventHandlers() {
+    document.removeEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleAddExperience);
+  }
+
   ShellExperienceMeta getShellExperienceMeta(ShellExperience experience) {
     return _registeredExperiences[experience];
+  }
+
+  void initializeEventHandlers() {
+    document.addEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleAddExperience);
   }
 }

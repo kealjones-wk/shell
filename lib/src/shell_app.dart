@@ -45,8 +45,8 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     super.componentWillMount();
 
     _shellExperienceManager = new ShellExperienceManager();
+    _shellExperienceManager.initializeEventHandlers();
 
-    document.addEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleExperienceRequested);
     document.addEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
     document.addEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
   }
@@ -55,7 +55,8 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   void componentWillUnmount() {
     super.componentWillUnmount();
 
-    document.removeEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleExperienceRequested);
+    _shellExperienceManager.disposeEventHandlers();
+
     document.removeEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
     document.removeEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
   }
