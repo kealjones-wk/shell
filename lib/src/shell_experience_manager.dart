@@ -1,19 +1,25 @@
+import 'dart:html';
+
 import './shell_experience.dart';
 import './shell_experience_meta.dart';
 
-class ShellExperienceRegistry {
-  static final ShellExperienceRegistry _instance = new ShellExperienceRegistry._internal();
+class ShellExperienceManager {
+  static final ShellExperienceManager _instance = new ShellExperienceManager._internal();
 
-  factory ShellExperienceRegistry() {
+  factory ShellExperienceManager() {
     return _instance;
   }
 
   Map _registeredExperiences = new Map<ShellExperience, ShellExperienceMeta>();
 
-  ShellExperienceRegistry._internal() {
+  ShellExperienceManager._internal() {
     ShellExperience.experiences.forEach((experience) {
       _registeredExperiences[experience] = new ShellExperienceMeta(experience);
     });
+  }
+
+  void addExperience(ShellExperience experience) {
+    document.body.append(new Element.tag('${_registeredExperiences[experience].prefix}-experience'));
   }
 
   ShellExperienceMeta getShellExperienceMeta(ShellExperience experience) {
