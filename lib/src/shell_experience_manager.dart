@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:html';
 
 import 'package:shell_events/shell_events.dart' show ShellEventConstants;
