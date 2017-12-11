@@ -1,6 +1,5 @@
 import 'dart:html';
 
-import 'package:js/js_util.dart';
 import 'package:over_react/over_react.dart';
 import 'package:shell_events/shell_events.dart';
 
@@ -81,13 +80,12 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     return (Dom.div()..className = 'shell__controls')(
       (Dom.button()
         ..onClick = (event) {
-          var eventDetail = jsify({'experience': ShellExperience.DOCS});
-          event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: eventDetail));
+          event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: {'experience': ShellExperience.DOCS}));
         }
       )('New Docs Experience'),
       (Dom.button()..onClick = (event) {
-        var eventDetail = jsify({'experience': ShellExperience.SPREADSHEETS});
-        event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: eventDetail));
+        event.target.dispatchEvent(new ShellExperienceRequstedEvent(
+          detail: {'experience': ShellExperience.SPREADSHEETS}));
       })('New Spreadsheets Experience'),
       (Dom.button()
         ..onClick = (event) {
@@ -138,7 +136,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   void _handleToggleMessages(event) {
     var toggledBy = (event.target is ButtonElement) ? 'shell' : event.target;
     findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
-      jsify({'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'})
+      {'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'}
     ));
     
     setState(newState()..showMessages = !state.showMessages);
