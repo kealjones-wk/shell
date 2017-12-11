@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:html';
 
 import 'package:shell_events/shell_events.dart' show ShellEventConstants;
 
+import './async_script_loader.dart';
 import './shell_experience.dart';
 import './shell_experience_meta.dart';
 
@@ -25,7 +27,15 @@ class ShellExperienceManager {
   }
 
   void addExperience(ShellExperience experience) {
-    document.body.append(new Element.tag(getShellExperienceMeta(experience).tag));
+    var experienceMeta = getShellExperienceMeta(experience);
+    
+    if(!experienceMeta.isLoaded) {
+      var asyncExperienceLoader = new AsyncScriptLoader(experienceMeta.source);
+      var asyncExperienceLoaderOnLoad = asyncExperienceLoader.loadScript();
+      asyncExperienceLoaderOnLoad.whenComplete(() => experienceMeta.isLoaded = true);
+    }
+    
+    document.body.append(new Element.tag(experienceMeta.tag));
   }
 
   void disposeEventHandlers() {
