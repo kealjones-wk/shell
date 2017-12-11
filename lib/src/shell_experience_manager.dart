@@ -19,7 +19,7 @@ class ShellExperienceManager {
   }
 
   void addExperience(ShellExperience experience) {
-    document.body.append(new Element.tag('${_registeredExperiences[experience].prefix}-experience'));
+    document.body.append(new Element.tag(getShellExperienceMeta(experience).tag));
   }
 
   ShellExperienceMeta getShellExperienceMeta(ShellExperience experience) {

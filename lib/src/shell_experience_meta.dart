@@ -4,6 +4,7 @@ class ShellExperienceMeta {
   static const CDN_URL = 'localhost:9000';
   static const RELEASE_DIR = 'latest';
   static const SCRIPT_NAME = 'index.dart.js';
+  static const TAG_POSTFIX = '-experience';
 
   ShellExperienceMeta(this.shellExperience) {
     prefix = shellExperience.prefix;
@@ -13,6 +14,10 @@ class ShellExperienceMeta {
   ShellExperience shellExperience;
   
   String prefix;
+
+  String get tag {
+    return '${prefix}${TAG_POSTFIX}';
+  }
 
   String source;
 
