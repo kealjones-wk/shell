@@ -87,8 +87,8 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
 
   void _handleToggleMessages(event) {
     var toggledBy = (event.target is ButtonElement) ? 'shell' : event.target;
-    findDomNode(this).dispatchEvent(new ShellPostMessageEvent(detail:
-      {'message': 'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'}
+    findDomNode(this).dispatchEvent(new ShellPostMessageEvent(
+      'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'
     ));
     
     setState(newState()..showMessages = !state.showMessages);
