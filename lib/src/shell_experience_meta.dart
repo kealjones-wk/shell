@@ -8,6 +8,7 @@ class ShellExperienceMeta {
 
   ShellExperienceMeta(this.shellExperience) {
     prefix = shellExperience.prefix;
+    tag = '${prefix}${TAG_POSTFIX}';
     source = 'http://${CDN_URL}/${tag}/${RELEASE_DIR}/${SCRIPT_NAME}';
   }
 
@@ -19,7 +20,5 @@ class ShellExperienceMeta {
 
   String source;
 
-  String get tag {
-    return '${prefix}${TAG_POSTFIX}';
-  }
+  String tag;
 }

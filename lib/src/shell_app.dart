@@ -124,12 +124,11 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     return (Dom.div()..className = 'shell__controls')(
       (Dom.button()
         ..onClick = (event) {
-          event.target.dispatchEvent(new ShellExperienceRequstedEvent(detail: {'experience': ShellExperience.DOCS}));
+          event.target.dispatchEvent(new ShellExperienceRequstedEvent(ShellExperience.DOCS.prefix));
         }
       )('New Docs Experience'),
       (Dom.button()..onClick = (event) {
-        event.target.dispatchEvent(new ShellExperienceRequstedEvent(
-          detail: {'experience': ShellExperience.SPREADSHEETS}));
+        event.target.dispatchEvent(new ShellExperienceRequstedEvent(ShellExperience.SPREADSHEETS.prefix));
       })('New Spreadsheets Experience'),
       (Dom.button()
         ..onClick = (event) {

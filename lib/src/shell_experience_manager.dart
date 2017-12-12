@@ -14,11 +14,11 @@ class ShellExperienceManager {
     return _instance;
   }
 
-  Map _registeredExperiences = new Map<ShellExperience, ShellExperienceMeta>();
+  Map _registeredExperiences = new Map<String, ShellExperienceMeta>();
 
   ShellExperienceManager._internal() {
-    ShellExperience.experiences.forEach((experience) {
-      _registeredExperiences[experience] = new ShellExperienceMeta(experience);
+    ShellExperience.experiences.forEach((ShellExperience experience) {
+      _registeredExperiences[experience.prefix] = new ShellExperienceMeta(experience);
     });
   }
 
@@ -26,8 +26,8 @@ class ShellExperienceManager {
     addExperience(event.detail['experience']);
   }
 
-  Future addExperience(ShellExperience experience) async {
-    var experienceMeta = getShellExperienceMeta(experience);
+  Future addExperience(String experience) async {
+    var experienceMeta = _registeredExperiences[experience];
     
     if(!experienceMeta.isLoaded) {
       var asyncExperienceLoader = new AsyncScriptLoader(experienceMeta.source);
@@ -40,10 +40,6 @@ class ShellExperienceManager {
 
   void disposeEventHandlers() {
     document.removeEventListener(ShellEventConstants.EXPERIENCE_REQUESTED.event, _handleAddExperience);
-  }
-
-  ShellExperienceMeta getShellExperienceMeta(ShellExperience experience) {
-    return _registeredExperiences[experience];
   }
 
   void initializeEventHandlers() {
