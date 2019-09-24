@@ -28,13 +28,13 @@ class ShellExperienceManager {
 
   Future addExperience(String experience) async {
     var experienceMeta = _registeredExperiences[experience];
-    
+
     if(!experienceMeta.isLoaded) {
       var asyncExperienceLoader = new AsyncScriptLoader(experienceMeta.source);
       var asyncExperienceLoaderOnLoad = asyncExperienceLoader.loadScript();
       asyncExperienceLoaderOnLoad.whenComplete(await () => experienceMeta.isLoaded = true);
     }
-    
+
     document.body.append(new Element.tag(experienceMeta.tag));
   }
 

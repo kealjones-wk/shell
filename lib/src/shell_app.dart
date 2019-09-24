@@ -5,35 +5,36 @@ import 'package:shell_events/shell_events.dart';
 
 import './shell_experience.dart';
 import './shell_experience_manager.dart';
+part 'shell_app.over_react.g.dart';
 
 @Factory()
-UiFactory<ShellAppProps> ShellApp;
+UiFactory<ShellAppProps> ShellApp = _$ShellApp;
 
 @Props()
-class ShellAppProps extends UiProps {
+class _$ShellAppProps extends UiProps {
   bool showMessages;
 
   List messages;
 }
 
 @State()
-class ShellAppState extends UiState {
+class _$ShellAppState extends UiState {
   bool showMessages;
-  
-  List<String> messages;
+
+  List messages;
 }
 
 @Component()
 class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState>  {
   ShellExperienceManager _shellExperienceManager;
   DivElement _messagesBox;
-  
+
   @override
   Map getDefaultProps() => (newProps()
     ..showMessages = true
     ..messages = []
   );
-  
+
   @override
   Map getInitialState() => (newState()
     ..showMessages = props.showMessages
@@ -50,7 +51,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     document.addEventListener(ShellEventConstants.POST_MESSAGE.event, _handlePostMessage);
     document.addEventListener(ShellEventConstants.TOGGLE_MESSAGES.event, _handleToggleMessages);
   }
-  
+
   @override
   void componentWillUnmount() {
     super.componentWillUnmount();
@@ -80,7 +81,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
   void _handlePostMessage(event) {
     var messages = new List.from(state.messages);
     var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.target}:';
-    
+
     messages.add('${new DateTime.now().toString()} - ${postBy} ${event.detail['message']}');
     setState(newState()..messages = messages);
   }
@@ -89,13 +90,13 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     var toggledBy = (event.target is ButtonElement) ? 'shell' : event.target;
     findDomNode(this).dispatchEvent(new ShellPostMessageEvent(
       'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'
-    ));
-    
+    ).e);
+
     setState(newState()..showMessages = !state.showMessages);
   }
 
   List<ReactElement> _renderMessages() {
-    List messages = [];
+    List<ReactElement> messages = [];
 
     for (var i = 0; i < state.messages.length; i++) {
       messages.add(Dom.em()(Dom.p()(state.messages[i])));
@@ -108,7 +109,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     var classes = new ClassNameBuilder()
       ..add('shell__messages')
       ..add('shell__messages--hidden', !state.showMessages);
-    
+
     return (Dom.div()
       ..className = classes.toClassName()
       ..ref = (ref) {
@@ -124,15 +125,15 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
     return (Dom.div()..className = 'shell__controls')(
       (Dom.button()
         ..onClick = (event) {
-          event.target.dispatchEvent(new ShellExperienceRequstedEvent(ShellExperience.DOCS.prefix));
+          event.target.dispatchEvent(new ShellExperienceRequstedEvent(ShellExperience.DOCS.prefix).e);
         }
       )('New Docs Experience'),
       (Dom.button()..onClick = (event) {
-        event.target.dispatchEvent(new ShellExperienceRequstedEvent(ShellExperience.SPREADSHEETS.prefix));
+        event.target.dispatchEvent(new ShellExperienceRequstedEvent(ShellExperience.SPREADSHEETS.prefix).e);
       })('New Spreadsheets Experience'),
       (Dom.button()
         ..onClick = (event) {
-          event.target.dispatchEvent(new ShellToggleMessagesEvent());
+          event.target.dispatchEvent(new ShellToggleMessagesEvent().e);
         }
       )('Toggle Messages')
     );
