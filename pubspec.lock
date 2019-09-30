@@ -340,9 +340,11 @@ packages:
   over_react:
     dependency: "direct main"
     description:
-      name: over_react
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "3.1.0-wip"
+      resolved-ref: d724cb41b3c78d8f412bdfdbc9c808d71b60d136
+      url: "git@github.com:Workiva/over_react.git"
+    source: git
     version: "2.5.2+dart2"
   package_config:
     dependency: transitive
@@ -415,12 +417,21 @@ packages:
     source: hosted
     version: "2.0.5"
   react:
+    dependency: "direct overridden"
+    description:
+      path: "."
+      ref: "5.1.0-wip"
+      resolved-ref: "9a68e7855f03e3d9e914a3952db9d43b575c6f2f"
+      url: "git@github.com:cleandart/react-dart.git"
+    source: git
+    version: "5.1.0-dev.0"
+  redux:
     dependency: transitive
     description:
-      name: react
+      name: redux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.9.1"
+    version: "3.0.0"
   sass:
     dependency: transitive
     description:

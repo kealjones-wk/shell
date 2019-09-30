@@ -12,8 +12,8 @@ class AsyncScriptLoader {
     ScriptElement _scriptElement;
 
     Future loadScript() {
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(_scriptElement, firstScriptTag);
+      var headTag = document.getElementsByTagName('head')[0];
+      headTag.append(_scriptElement);
 
       return _scriptElement.onLoad.first;
     }

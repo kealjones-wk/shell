@@ -72,7 +72,7 @@ class ShellAppComponent extends UiStatefulComponent<ShellAppProps, ShellAppState
 
   render() {
     return (Dom.div()..className = 'shell')(
-      Dom.h2()('Using over_react 1.18.0'),
+      Dom.h2()('Using over_react 3.1.0-wip'),
       _renderShellControls(),
       _renderMessagesBox()
     );
